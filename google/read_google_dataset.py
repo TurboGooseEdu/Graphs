@@ -1,7 +1,9 @@
 from graph_impls.directed_graph import DirectedGraph
 
 
-def read_google_dataset(filename, graph=DirectedGraph()):
+def read_google_dataset(filename, graph=None):
+    if graph is None:
+        graph = DirectedGraph()
     with open(filename) as file:
         for line in file:
             if line.startswith("#"):

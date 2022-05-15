@@ -22,6 +22,6 @@ def read_google_dataset_as_undirected_graph(filename):
         for row in csv_reader:
             if not row[0].isdigit():
                 continue
-            node_from, node_to, *idk= row
+            node_from, node_to, *_ = row
             graph.add_edge(int(node_from), int(node_to))
     return graph
