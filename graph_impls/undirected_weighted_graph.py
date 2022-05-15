@@ -1,14 +1,12 @@
 class UndirectedWeightedGraph:
-    def __init__(self, v):
-        self.adj = {k: [] for k in range(1, v + 1)}
-        self.v = v
+    def __init__(self):
+        self.adj = {}
+        self.v = 0
         self.e = 0
 
     def add_edge(self, a, b, w):
-        if a not in self.adj:
-            self.add_node(a)
-        if b not in self.adj:
-            self.add_node(b)
+        self.add_node(a)
+        self.add_node(b)
         adj_a = [n for n, w in self.adj[a]]
         adj_b = [n for n, w in self.adj[b]]
         if b not in adj_a and a not in adj_b:
@@ -33,7 +31,7 @@ class UndirectedWeightedGraph:
         self.e -= 1
 
     def add_node(self, a):
-        if a not in self.adj:
+        if a not in self.adj.keys():
             self.adj[a] = []
             self.v += 1
 
