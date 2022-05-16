@@ -135,4 +135,5 @@ dmypy.json
 
 #local
 
-*local*
+local*
+data*
