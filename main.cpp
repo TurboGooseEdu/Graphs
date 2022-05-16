@@ -31,6 +31,15 @@ namespace graph
         (*adj)[v - 1].push_back(u - 1);
     }
 
+    std::vector<std::vector<int>> transposeGraph(const std::vector<std::vector<int>> *adj)
+    {
+        std::vector<std::vector<int>> transposed;
+        for (int i = 0; i < adj->size(); i++)
+            for (int j = 0; j < (*adj)[i].size(); j++)
+                addEdge(&transposed, (*adj)[i][j], i);
+        return transposed;
+    }
+
     /**
      * @brief Utility function for depth first seach algorithm
      * this function explores the vertex which is passed into.
