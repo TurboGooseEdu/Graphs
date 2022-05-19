@@ -1,6 +1,6 @@
 #include "graph.h"
 
-graph::Graph::Graph(std::string sourceFilename, std::string resultFilename)
+Graph::Graph(std::string sourceFilename, std::string resultFilename)
 {
     {
         this->sourceName = sourceFilename;
@@ -11,7 +11,7 @@ graph::Graph::Graph(std::string sourceFilename, std::string resultFilename)
     }
 }
 
-int graph::Graph::getNumberVerticesFromFile()
+int Graph::getNumberVerticesFromFile()
 {
     std::ifstream in(this->name);
     std::string line;
@@ -37,7 +37,7 @@ int graph::Graph::getNumberVerticesFromFile()
     return maxNumber;
 }
 
-void graph::Graph::addEdge(std::vector<std::vector<int>> *adj, int u, int v)
+void Graph::addEdge(std::vector<std::vector<int>> *adj, int u, int v)
 {
     // здесь "-1" везде, потому что нумерация вершин после препроцессинга от 1
     // а это в свою очередь было нужно из-за того, что вектор по умолчанию забивается нулями
@@ -45,7 +45,7 @@ void graph::Graph::addEdge(std::vector<std::vector<int>> *adj, int u, int v)
     (*adj)[v - 1].push_back(u - 1); // todo вроде бы.... отсутствие этой строчки ничего не ломает...
 }
 
-void graph::Graph::makeGraphFromFile()
+void Graph::makeGraphFromFile()
 {
     std::ifstream in(name);
     std::string line;
@@ -62,13 +62,13 @@ void graph::Graph::makeGraphFromFile()
     }
     in.close();
 }
-std::string graph::Graph::getName()
+std::string Graph::getName()
 {
     return this->name.substr(5, this->name.length() - 9);
 }
-graph::Graph::~Graph() {}
+Graph::~Graph() {}
 
-int graph::Graph::getVertices()
+int Graph::getVertices()
 {
     return this->vertices;
 }

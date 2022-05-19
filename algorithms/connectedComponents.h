@@ -6,17 +6,14 @@
 #include "../utils/dfs.h"
 #include "../utils/stack_dfs.h"
 
-namespace graph
-{
-    /**
-     * @brief Function that perfoms depth first search algorithm on graph
-     * and calculated the number of connected components.
-     *
-     * @param adj adjacency list of graph.
-     *
-     * @return connected_components number of connected components in graph.
-     */
-    int getConnectedComponents(graph::Graph g);
-};
+/**
+ * @brief Function that perfoms depth first search algorithm on graph
+ * and calculated the number of connected components.
+ *
+ * @param adj adjacency list of graph.
+ *
+ * @return connected_components number of connected components in graph.
+ */
+int getConnectedComponents(Graph g);
 
 #endif

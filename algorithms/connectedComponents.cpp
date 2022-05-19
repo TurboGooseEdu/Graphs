@@ -1,6 +1,6 @@
 #include "connectedComponents.h"
 
-int graph::getConnectedComponents(graph::Graph g)
+int getConnectedComponents(Graph g)
 {
     // todo добавить так, чтобы ещё найти самую большую компоненту и куда-то её сохранить
     std::vector<std::vector<int>> *adj = &g.adj;

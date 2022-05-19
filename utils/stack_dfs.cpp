@@ -1,6 +1,6 @@
 #include "stack_dfs.h"
 
-void graph::stackDFS(const std::vector<std::vector<int>> *adj, int root, std::vector<bool> *visited)
+void stackDFS(const std::vector<std::vector<int>> *adj, int root, std::vector<bool> *visited)
 {
     std::stack<int> s;
     s.push(root);
