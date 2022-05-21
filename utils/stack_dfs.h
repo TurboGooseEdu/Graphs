@@ -1,6 +1,7 @@
 #ifndef UTILS_STACK_DFS_16_05_2022
 #define UTILS_STACK_DFS_16_05_2022
 
+#include <set>
 #include <stack>
 #include <vector>
 
@@ -12,6 +13,6 @@
  * @param visited массив bool, где храним метки посещена/не посещена вершина
  * @return ** void
  */
-void stackDFS(const std::vector<std::vector<int>> *adj, int root, std::vector<bool> *visited);
+void stackDFS(std::vector<std::set<int>> *adj, int root, std::vector<bool> *visited);
 
 #endif

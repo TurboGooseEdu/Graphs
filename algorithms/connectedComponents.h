@@ -1,9 +1,9 @@
 #ifndef ALGORITHMS_CONNECTED_COMPONENTS_16_05_2022
 #define ALGORITHMS_CONNECTED_COMPONENTS_16_05_2022
 
+#include "../graphs/UndirectedGraph.h"
 #include "../utils/dfs.h"
 #include "../utils/stack_dfs.h"
-#include "graph.h"
 #include <vector>
 
 /**
@@ -14,6 +14,6 @@
  *
  * @return connected_components number of connected components in graph.
  */
-int getConnectedComponents(Graph g);
+int getConnectedComponents(UndirectedGraph g);
 
 #endif

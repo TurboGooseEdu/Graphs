@@ -1,7 +1,6 @@
 #ifndef UTILS_PARSE_HEADER_16_05_2022
 #define UTILS_PARSE_HEADER_16_05_2022
 
-#include <map>
 #include <sstream>
 
 std::pair<int, int> parse_txt_line(std::string line);

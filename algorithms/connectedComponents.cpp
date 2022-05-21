@@ -1,9 +1,10 @@
 #include "connectedComponents.h"
 
-int getConnectedComponents(Graph g) {
+int getConnectedComponents(UndirectedGraph g) {
     // todo добавить так, чтобы ещё найти самую большую компоненту и куда-то её сохранить
-    std::vector<std::vector<int>> *adj = &g.adj;
-    int n = adj->size();
+
+    std::vector<std::set<int>> *adj = &g.adj;
+    int n = g.getVertices();
     int connected_components = 0;
     std::vector<bool> visited(n, false);
     bool nonRecursive = true; // todo
