@@ -1,9 +1,9 @@
 #ifndef PREPROCESS_16_05_2022
 #define PREPROCESS_16_05_2022
 
+#include "utils/parse.h"
 #include <fstream>
 #include <string>
-#include "utils/parse.h"
 
 /**
  * @brief Просматривает строчки начинающиеся с цифры.

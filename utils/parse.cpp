@@ -1,7 +1,6 @@
 #include "parse.h"
 
-std::pair<int, int> parse_txt_line(std::string line)
-{
+std::pair<int, int> parse_txt_line(std::string line) {
     int u, v;
     std::istringstream iss(line);
 
@@ -11,8 +10,7 @@ std::pair<int, int> parse_txt_line(std::string line)
     return std::make_pair(u, v);
 }
 
-std::pair<int, int> parse_csv_line(std::string line)
-{
+std::pair<int, int> parse_csv_line(std::string line) {
     int u, v;
     char colon;
     std::istringstream iss(line);

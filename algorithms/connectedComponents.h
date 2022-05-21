@@ -1,10 +1,10 @@
 #ifndef ALGORITHMS_CONNECTED_COMPONENTS_16_05_2022
 #define ALGORITHMS_CONNECTED_COMPONENTS_16_05_2022
 
-#include <vector>
-#include "graph.h"
 #include "../utils/dfs.h"
 #include "../utils/stack_dfs.h"
+#include "graph.h"
+#include <vector>
 
 /**
  * @brief Function that perfoms depth first search algorithm on graph

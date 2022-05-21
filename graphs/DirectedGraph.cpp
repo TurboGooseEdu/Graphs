@@ -3,7 +3,6 @@
 //
 
 #include "DirectedGraph.h"
-#include "iostream"
 
 void DirectedGraph::add_node(int n) {
     if (adj.count(n) == 0) {
@@ -54,7 +53,6 @@ std::set<int> DirectedGraph::get_incoming_neighbours(int v) {
 std::set<int> DirectedGraph::get_outcoming_neighbours(int v) {
     return adj[v];
 }
-
 
 int DirectedGraph::get_vertices() {
     return vertices;

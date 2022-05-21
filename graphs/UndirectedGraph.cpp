@@ -3,8 +3,13 @@
 //
 
 #include "UndirectedGraph.h"
-#include "iostream"
 
+/**
+ * @brief creates if not exists
+ *
+ * @param n номер вершины
+ * @return ** void
+ */
 void UndirectedGraph::add_node(int n) {
     if (adj.count(n) == 0) {
         std::set<int> s;
@@ -16,7 +21,7 @@ void UndirectedGraph::add_node(int n) {
 void UndirectedGraph::remove_node(int n) {
     std::set<int> adj_n = adj[n];
     edges -= adj_n.size();
-    for (auto node: adj_n) {
+    for (auto node : adj_n) {
         adj[node].erase(n);
     }
     adj.erase(n);
@@ -26,23 +31,19 @@ void UndirectedGraph::remove_node(int n) {
 void UndirectedGraph::add_edge(int u, int v) {
     add_node(u);
     add_node(v);
-    std::set<int> adj_u = adj[u];
-    std::set<int> adj_v = adj[v];
-    if (adj_u.find(v) == adj_u.end() && adj_v.find(u) == adj_v.end()) {
-        if (u != v) {
+
+    if (adj[u].find(v) == adj[u].end()) {
+        if (u != v)
             adj[v].insert(u);
-        }
         adj[u].insert(v);
         edges++;
     }
 }
 
 void UndirectedGraph::remove_edge(int u, int v) {
-    std::set<int> adj_u = adj[u];
-    std::set<int> adj_v = adj[v];
-    if (adj_u.find(v) == adj_u.end() || adj_v.find(u) == adj_v.end()) {
+    if (adj[u].find(v) == adj[u].end())
         return;
-    }
+
     adj[u].erase(v);
     adj[v].erase(u);
     edges--;
@@ -51,7 +52,6 @@ void UndirectedGraph::remove_edge(int u, int v) {
 std::set<int> UndirectedGraph::get_neighbours(int v) {
     return adj[v];
 }
-
 
 int UndirectedGraph::get_vertices() const {
     return vertices;
@@ -75,5 +75,3 @@ void UndirectedGraph::print() {
     }
     std::cout << "V: " << vertices << ", E: " << edges << std::endl;
 }
-
-

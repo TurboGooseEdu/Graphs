@@ -1,8 +1,8 @@
 #ifndef UTILS_STACK_DFS_16_05_2022
 #define UTILS_STACK_DFS_16_05_2022
 
-#include <vector>
 #include <stack>
+#include <vector>
 
 /**
  * @brief нерекурсивный дфс на стеке, изменяет visited на месте

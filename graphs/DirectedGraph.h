@@ -5,12 +5,14 @@
 #ifndef GRAPHS_DIRECTEDGRAPH_H
 #define GRAPHS_DIRECTEDGRAPH_H
 
-#include "set"
-#include "map"
+#include <iostream>
+#include <map>
+#include <set>
 
 class DirectedGraph {
     int vertices = 0;
     int edges = 0;
+
 public:
     std::map<int, std::set<int>> adj;
 
@@ -25,4 +27,4 @@ public:
     void print();
 };
 
-#endif //GRAPHS_DIRECTEDGRAPH_H
+#endif // GRAPHS_DIRECTEDGRAPH_H

@@ -5,12 +5,14 @@
 #ifndef GRAPHS_UNDIRECTEDGRAPH_H
 #define GRAPHS_UNDIRECTEDGRAPH_H
 
-#include "set"
-#include "map"
+#include <iostream>
+#include <map>
+#include <set>
 
 class UndirectedGraph {
     int vertices = 0;
     int edges = 0;
+
 public:
     std::map<int, std::set<int>> adj;
 
@@ -24,5 +26,4 @@ public:
     void print();
 };
 
-
-#endif //GRAPHS_UNDIRECTEDGRAPH_H
+#endif // GRAPHS_UNDIRECTEDGRAPH_H
