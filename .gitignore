@@ -136,4 +136,8 @@ dmypy.json
 local*
 data*
 
+# 
 cmake*
+
+# object file
+main
