@@ -5,24 +5,20 @@
 #ifndef GRAPHS_UNDIRECTEDGRAPH_H
 #define GRAPHS_UNDIRECTEDGRAPH_H
 
-#include "set"
-#include "map"
+#include "Graph.h"
+#include <iostream>
+#include <set>
 
-class UndirectedGraph {
-    int vertices = 0;
-    int edges = 0;
+class UndirectedGraph : public Graph {
 public:
-    std::map<int, std::set<int>> adj;
+    UndirectedGraph(std::string sourceFilename, std::string filename, int vertices);
 
-    void add_edge(int u, int v);
-    void remove_edge(int u, int v);
-    void add_node(int n);
-    void remove_node(int n);
-    std::set<int> get_neighbours(int v);
-    int get_vertices() const;
-    int get_edges() const;
-    void print();
+    void addEdge(int u, int v);
+    void simpleAddEdge(int u, int v);
+    void removeNode(int n);
+    void removeEdge(int u, int v);
+
+    std::set<int> getNeighbours(int v);
 };
 
-
-#endif //GRAPHS_UNDIRECTEDGRAPH_H
+#endif // GRAPHS_UNDIRECTEDGRAPH_H

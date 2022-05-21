@@ -128,4 +128,16 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea
+
+#vscode
+*.vscode
+
+#local
+local*
+data*
+
+# 
 cmake*
+
+# object file
+main
