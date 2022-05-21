@@ -5,26 +5,20 @@
 #ifndef GRAPHS_DIRECTEDGRAPH_H
 #define GRAPHS_DIRECTEDGRAPH_H
 
-#include <iostream>
-#include <map>
+#include "Graph.h"
 #include <set>
 
-class DirectedGraph {
-    int vertices = 0;
-    int edges = 0;
-
+class DirectedGraph : public Graph {
 public:
-    std::map<int, std::set<int>> adj;
+    DirectedGraph(std::string sourceFilename, std::string filename);
 
-    void add_edge(int u, int v);
-    void remove_edge(int u, int v);
-    void add_node(int n);
-    void remove_node(int n);
-    std::set<int> get_outcoming_neighbours(int v);
-    std::set<int> get_incoming_neighbours(int v);
-    int get_vertices();
-    int get_edges();
-    void print();
+    void addEdge(int u, int v);
+    void simpleAddEdge(int u, int v);
+    void removeNode(int n);
+    void removeEdge(int u, int v);
+
+    std::set<int> getOutcomingNeighbours(int v);
+    std::set<int> getIncomingNeighbours(int v);
 };
 
 #endif // GRAPHS_DIRECTEDGRAPH_H

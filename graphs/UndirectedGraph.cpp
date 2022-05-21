@@ -3,75 +3,42 @@
 //
 
 #include "UndirectedGraph.h"
-
-/**
- * @brief creates if not exists
- *
- * @param n номер вершины
- * @return ** void
- */
-void UndirectedGraph::add_node(int n) {
-    if (adj.count(n) == 0) {
-        std::set<int> s;
-        adj[n] = s;
-        vertices++;
-    }
+UndirectedGraph::UndirectedGraph(std::string sourceFilename, std::string filename, int vertices)
+    : Graph(sourceFilename, filename, vertices) {
+    this->make();
 }
 
-void UndirectedGraph::remove_node(int n) {
-    std::set<int> adj_n = adj[n];
-    edges -= adj_n.size();
-    for (auto node : adj_n) {
-        adj[node].erase(n);
-    }
-    adj.erase(n);
-    vertices--;
+void UndirectedGraph::addEdge(int u, int v) {
+    this->addNode(u);
+    this->addNode(v);
+    simpleAddEdge(u, v);
 }
 
-void UndirectedGraph::add_edge(int u, int v) {
-    add_node(u);
-    add_node(v);
-
-    if (adj[u].find(v) == adj[u].end()) {
+void UndirectedGraph::simpleAddEdge(int u, int v) {
+    if (this->adj[u].find(v) == this->adj[u].end()) {
         if (u != v)
-            adj[v].insert(u);
-        adj[u].insert(v);
-        edges++;
+            this->adj[v].insert(u);
+        this->adj[u].insert(v);
+        ++this->edges;
     }
 }
+void UndirectedGraph::removeNode(int u) {
+    this->edges -= this->adj[u].size();
+    for (auto v : this->adj[u]) {
+        this->adj[v].erase(u);
+    }
+    this->adj[u].clear();
+    --this->vertices;
+}
 
-void UndirectedGraph::remove_edge(int u, int v) {
-    if (adj[u].find(v) == adj[u].end())
+void UndirectedGraph::removeEdge(int u, int v) {
+    if (this->adj[u].find(v) == this->adj[u].end())
         return;
-
-    adj[u].erase(v);
-    adj[v].erase(u);
-    edges--;
+    this->adj[u].erase(v);
+    this->adj[v].erase(u);
+    --this->edges;
 }
 
-std::set<int> UndirectedGraph::get_neighbours(int v) {
-    return adj[v];
-}
-
-int UndirectedGraph::get_vertices() const {
-    return vertices;
-}
-
-int UndirectedGraph::get_edges() const {
-    return edges;
-}
-
-void UndirectedGraph::print() {
-    for (std::pair<int, std::set<int>> p : adj) {
-        std::cout << "(" << p.first << ") -> [";
-
-        for (auto v : p.second) {
-            std::cout << v << ", ";
-        }
-        if (p.second.size() != 0) {
-            std::cout << "\b \b\b \b";
-        }
-        std::cout << "]" << std::endl;
-    }
-    std::cout << "V: " << vertices << ", E: " << edges << std::endl;
+std::set<int> UndirectedGraph::getNeighbours(int v) {
+    return this->adj[v];
 }

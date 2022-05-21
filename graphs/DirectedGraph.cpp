@@ -4,75 +4,54 @@
 
 #include "DirectedGraph.h"
 
-void DirectedGraph::add_node(int n) {
-    if (adj.count(n) == 0) {
-        std::set<int> s;
-        adj[n] = s;
-        vertices++;
-    }
+DirectedGraph::DirectedGraph(std::string sourceFilename, std::string filename)
+    : Graph(sourceFilename, filename, vertices) {
+    this->make();
 }
 
-void DirectedGraph::remove_node(int n) {
-    edges -= adj[n].size();
-    for (std::pair<int, std::set<int>> p : adj) {
-        if (p.second.find(n) != p.second.end()) {
-            adj[p.first].erase(n);
-            edges--;
+void DirectedGraph::addEdge(int u, int v) {
+
+    this->addNode(u);
+    this->addNode(v);
+    simpleAddEdge(u, v);
+}
+
+void DirectedGraph::simpleAddEdge(int u, int v) {
+    if (this->adj[u].find(v) == this->adj[u].end()) {
+        this->adj[u].insert(v);
+        this->edges++;
+    }
+};
+
+void DirectedGraph::removeNode(int u) {
+    this->edges -= this->adj[u].size();
+    for (int v = 0; v < this->getVertices(); ++v) {
+        if (this->adj[v].find(u) != this->adj[v].end()) {
+            this->adj[v].erase(u);
+            this->edges--;
         }
     }
-    adj.erase(n);
-    vertices--;
+    this->adj[u].clear();
+    --this->vertices;
 }
 
-void DirectedGraph::add_edge(int u, int v) {
-    add_node(u);
-    add_node(v);
-    if (adj[u].find(v) == adj[u].end()) {
-        adj[u].insert(v);
-        edges++;
-    }
+void DirectedGraph::removeEdge(int u, int v) {
+    if (this->adj[u].find(v) == this->adj[u].end())
+        return;
+    this->adj[u].erase(v);
+    this->edges--;
 }
 
-void DirectedGraph::remove_edge(int u, int v) {
-    if (adj[u].find(v) != adj[u].end()) {
-        adj[u].erase(v);
-        edges--;
-    }
-}
-
-std::set<int> DirectedGraph::get_incoming_neighbours(int v) {
+std::set<int> DirectedGraph::getIncomingNeighbours(int v) {
     std::set<int> incoming;
-    for (std::pair<int, std::set<int>> p : adj) {
-        if (p.second.find(v) != p.second.end()) {
-            incoming.insert(p.first);
+    for (int u = 0; u < this->getVertices(); ++u) {
+        if (this->adj[u].find(v) != this->adj[u].end()) {
+            incoming.insert(u);
         }
     }
     return incoming;
 }
 
-std::set<int> DirectedGraph::get_outcoming_neighbours(int v) {
-    return adj[v];
-}
-
-int DirectedGraph::get_vertices() {
-    return vertices;
-}
-
-int DirectedGraph::get_edges() {
-    return edges;
-}
-
-void DirectedGraph::print() {
-    for (std::pair<int, std::set<int>> p : adj) {
-        std::cout << "(" << p.first << ") -> [";
-
-        for (auto v : p.second) {
-            std::cout << v << ", ";
-        }
-        if (p.second.size() != 0) {
-            std::cout << "\b \b\b \b";
-        }
-        std::cout << "]" << std::endl;
-    }
-    std::cout << "V: " << vertices << ", E: " << edges << std::endl;
+std::set<int> DirectedGraph::getOutcomingNeighbours(int v) {
+    return this->adj[v];
 }
