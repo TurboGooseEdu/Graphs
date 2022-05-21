@@ -7,7 +7,6 @@
 /** Main function */
 int main()
 {
-
     clock_t t = clock();
 
     Graph *astroGraph = new Graph("data/CA-AstroPh.txt", "data/astro.txt");

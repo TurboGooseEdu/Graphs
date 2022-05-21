@@ -130,10 +130,10 @@ dmypy.json
 .idea
 
 #vscode
-
 *.vscode
 
 #local
-
 local*
 data*
+
+cmake*
