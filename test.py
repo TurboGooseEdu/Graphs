@@ -53,3 +53,32 @@ def test_undirected():
 if __name__ == '__main__':
     test_directed()
     test_undirected()
+
+
+    # def dfs(adj: dict, root):
+    #     # нерекурсивный ДФС
+    #     # потом надо вынести отдельно и мб преобразовать, добавив всякие там время выхода, входа
+    #
+    #     explored, stack = {root}, [root]
+    #
+    #     while stack:
+    #         u = stack.pop()
+    #         explored.add(u)
+    #         for v in reversed(adj[u]):
+    #             if v not in explored:
+    #                 stack.append(v)
+    #     return explored
+    #
+    #
+    # def getConnectedComponents(adj):
+    #     connected_components = 0
+    #     visited = {key: False for key in adj.keys()}
+    #
+    #     for i in adj.keys():
+    #         if not visited[i]:
+    #             explored = dfs(adj, i)
+    #             for v in explored:
+    #                 visited[v] = True
+    #             connected_components += 1
+    #     return connected_components
+

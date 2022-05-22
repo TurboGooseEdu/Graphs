@@ -1,5 +1,6 @@
 class UndirectedGraph:
-    def __init__(self):
+    def __init__(self, name="Untitled undirected graph"):
+        self.name = name
         self.adj = {}
         self.v = 0
         self.e = 0

@@ -1,5 +1,6 @@
 class DirectedGraph:
-    def __init__(self):
+    def __init__(self, name="Untitled directed graph"):
+        self.name = name
         self.adj = {}
         self.v = 0
         self.e = 0
