@@ -1,10 +1,10 @@
-from typing import Union, List, Set, Dict
+from typing import Union, List, Set
 
 from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
 
 
-def calculate_stats_for_undirected_graph(graph: UndirectedGraph):
+def calculate_task_1(graph: Union[DirectedGraph, UndirectedGraph]):
     print("Граф:", graph.name)
     print("-" * 30)
     print("Количество вершин:", graph.v)
@@ -16,10 +16,14 @@ def calculate_stats_for_undirected_graph(graph: UndirectedGraph):
     print("Мощность максимальной компоненты слабой связности:", len(max_wcc))
     print("Доля вершин в максимальной компоненте слабой связности:", len(max_wcc) / graph.v)
 
+    if type(graph) is not DirectedGraph:
+        return
 
-def calculate_stats_for_directed_graph(graph: DirectedGraph):
-    print("Граф:", graph.name)
-    print("-" * 30)
+    scc = get_strongly_connected_components(graph)
+    max_scc = max(scc, key=lambda x: len(x))
+    print("Число компонент сильной связности:", len(scc))
+    print("Мощность максимальной компоненты сильной связности:", len(max_scc))
+    print("Доля вершин в максимальной компоненте сильной связности:", len(max_scc) / graph.v)
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
@@ -44,11 +48,37 @@ def get_weakly_connected_components(graph: Union[DirectedGraph, UndirectedGraph]
     return components
 
 
-def iterative_dfs_with_backtracking(graph: DirectedGraph) -> Dict[int, int]:
+def get_strongly_connected_components(graph: DirectedGraph) -> List[Set[int]]:
+    order = iterative_dfs_with_backtracking(transpose_graph(graph))
+    components = []
+    visited = {k: False for k in graph.adj.keys()}
+    for k in order:
+        if not visited[k]:
+            component = set()
+            stack = [k]
+            while stack:
+                v = stack.pop()
+                visited[v] = True
+                component.add(v)
+                for i in reversed(sort_sublist_in_list_order(graph.adj[v], order)):
+                    if not visited[i]:
+                        stack.append(i)
+            components.append(component)
+    return components
+
+
+def transpose_graph(graph: DirectedGraph) -> DirectedGraph:
+    transposed = DirectedGraph()
+    for a in graph.adj.keys():
+        for b in a:
+            transposed.add_edge(b, a)
+    return transposed
+
+
+def iterative_dfs_with_backtracking(graph: DirectedGraph) -> List[int]:
     visited = {k: False for k in graph.adj.keys()}
     components = []
-    time = 0
-    posts = {}
+    posts = []
     for k in graph.adj.keys():
         if not visited[k]:
             component = set()
@@ -64,17 +94,19 @@ def iterative_dfs_with_backtracking(graph: DirectedGraph) -> Dict[int, int]:
                             stack.append(i)
                 else:
                     if v not in posts:
-                        posts[v] = time
-                        time += 1
+                        posts.append(v)
             components.append(component)
+    posts.reverse()
     return posts
 
 
-def transpose_graph(graph: DirectedGraph) -> DirectedGraph:
-    transposed = DirectedGraph()
-    for a in graph.adj.keys():
-        for b in a:
-            transposed.add_edge(b, a)
-    return transposed
-
+def sort_sublist_in_list_order(sub: List[int], lst: List[int]) -> List[int]:
+    res = []
+    for i in lst:    # эта шняга работает за O(V) - все очень плохо...
+        if not sub:
+            break
+        if i in sub:
+            sub.remove(i)
+            res.append(i)
+    return res
 
