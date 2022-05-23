@@ -54,6 +54,6 @@ class UndirectedGraph:
     def __str__(self):
         result = ""
         for k, v in self.adj.items():
-            result += str(k) + " - " + str(v) + "\n"
+            result += str(k) + " - " + (str(v) if v else "{}") + "\n"
         result += "V: {}, E: {}\n".format(self.v, self.e)
         return result

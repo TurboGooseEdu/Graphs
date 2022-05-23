@@ -5,25 +5,24 @@ from graph_impls.undirected_graph import UndirectedGraph
 
 
 def calculate_task_1(graph: Union[DirectedGraph, UndirectedGraph]):
-    print("Граф:", graph.name)
-    print("-" * 30)
-    print("Количество вершин:", graph.v)
-    print("Количество ребер:", graph.e)
-    print("Плотность графа:", calculate_density(graph))
-    wcc = get_weakly_connected_components(graph)
-    max_wcc = max(wcc, key=lambda x: len(x))
-    print("Число компонент слабой связности:", len(wcc))
-    print("Мощность максимальной компоненты слабой связности:", len(max_wcc))
-    print("Доля вершин в максимальной компоненте слабой связности:", len(max_wcc) / graph.v)
+    if type(graph) is UndirectedGraph:
+        print("Граф:", graph.name)
+        print("-" * 30)
+        print("Количество вершин:", graph.v)
+        print("Количество ребер:", graph.e)
+        print("Плотность графа:", calculate_density(graph))
+        wcc = get_weakly_connected_components(graph)
+        max_wcc = max(wcc, key=lambda x: len(x))
+        print("Число компонент слабой связности:", len(wcc))
+        print("Мощность максимальной компоненты слабой связности:", len(max_wcc))
+        print("Доля вершин в максимальной компоненте слабой связности:", len(max_wcc) / graph.v)
 
-    if type(graph) is not DirectedGraph:
-        return
-
-    scc = get_strongly_connected_components(graph)
-    max_scc = max(scc, key=lambda x: len(x))
-    print("Число компонент сильной связности:", len(scc))
-    print("Мощность максимальной компоненты сильной связности:", len(max_scc))
-    print("Доля вершин в максимальной компоненте сильной связности:", len(max_scc) / graph.v)
+    if type(graph) is DirectedGraph:
+        scc = get_strongly_connected_components(graph)
+        max_scc = max(scc, key=lambda x: len(x))
+        print("Число компонент сильной связности:", len(scc))
+        print("Мощность максимальной компоненты сильной связности:", len(max_scc))
+        print("Доля вершин в максимальной компоненте сильной связности:", len(max_scc) / graph.v)
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
@@ -69,9 +68,10 @@ def get_strongly_connected_components(graph: DirectedGraph) -> List[Set[int]]:
 
 def transpose_graph(graph: DirectedGraph) -> DirectedGraph:
     transposed = DirectedGraph()
-    for a in graph.adj.keys():
-        for b in a:
-            transposed.add_edge(b, a)
+    for v, adj in graph.adj.items():
+        transposed.add_node(v)
+        for u in adj:
+            transposed.add_edge(u, v)
     return transposed
 
 
@@ -103,10 +103,9 @@ def iterative_dfs_with_backtracking(graph: DirectedGraph) -> List[int]:
 def sort_sublist_in_list_order(sub: List[int], lst: List[int]) -> List[int]:
     res = []
     for i in lst:    # эта шняга работает за O(V) - все очень плохо...
-        if not sub:
-            break
         if i in sub:
-            sub.remove(i)
             res.append(i)
+        if len(res) == len(sub):
+            break
     return res
 
