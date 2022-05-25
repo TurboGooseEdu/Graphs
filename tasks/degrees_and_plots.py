@@ -2,10 +2,7 @@ import matplotlib.pyplot as plt
 
 
 def node_degrees(graph):
-    result = {}
-    for vertex in graph.adj.items():
-        result[vertex[0]] = len(vertex[1])
-    return result
+    return dict(map(lambda item: (item[0], len(item[1])), graph.adj.items()))
 
 
 def degrees_probabilities(graph):
