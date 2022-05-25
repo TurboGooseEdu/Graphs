@@ -13,7 +13,7 @@ def calculate_for_undirected(graph: UndirectedGraph):
     print("Количество ребер:", graph.e)
     print("Плотность графа:", calculate_density(graph))
     wcc = get_weakly_connected_components(graph)
-    max_wcc = max(wcc, key=lambda x: len(x))
+    max_wcc = list(max(wcc, key=lambda x: len(x)))
     print("Число компонент слабой связности:", len(wcc))
     print("Мощность максимальной компоненты слабой связности:", len(max_wcc))
     print("Доля вершин в максимальной компоненте слабой связности:", len(max_wcc) / graph.v)
@@ -34,38 +34,36 @@ def calculate_for_directed(undir_graph: UndirectedGraph, dir_graph: DirectedGrap
     print("Доля вершин в максимальной компоненте сильной связности:", len(max_scc) / dir_graph.v)
 
 
-def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: Set[int], percentile=90) -> Tuple[int, int, int]:
-    min_ecc = inf  # radius
-    max_ecc = -1   # diameter
+def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int], p=90) -> Tuple[int, int, int]:
     ranges = []
-
+    eccs = {v: -1 for v in verts}
     for i in range(len(verts) - 1):
-        ecc = -1
-        for j in range(i, len(verts)):
-            path_len = bfs(graph, i, j)
+        for j in range(i + 1, len(verts)):
+            path_len = bfs(graph, verts[i], verts[j])
+            eccs[verts[i]] = max(eccs[verts[i]], path_len)
+            eccs[verts[j]] = max(eccs[verts[j]], path_len)
             ranges.append(path_len)
-            if path_len > ecc:
-                ecc = path_len
-        if ecc < min_ecc:
-            min_ecc = ecc
-        if ecc > max_ecc:
-            max_ecc = ecc
-
+    eccs_values = eccs.values()
+    radius = min(eccs_values)
+    diameter = max(eccs_values)
     ranges.sort()
-    p = ranges[percentile * len(ranges) // 100]
-    return min_ecc, max_ecc, p
+    percentile = ranges[p * len(ranges) // 100]
+    return radius, diameter, percentile
 
 
 def bfs(graph: UndirectedGraph, start: int, goal: int) -> int:
     if start == goal:
         return 0
-    queue = [start]
+    queue = [start, -1]
     visited = set()
     visited.add(start)
-    level = 0
+    level = 1
     while queue:
         s = queue.pop(0)
-        level += 1
+        if s == -1 and queue:
+            level += 1
+            queue.append(-1)
+            continue
         for neighbour in graph.adj[s]:
             if neighbour == goal:
                 return level
@@ -75,8 +73,8 @@ def bfs(graph: UndirectedGraph, start: int, goal: int) -> int:
     return -1
 
 
-def choose_x_random_vertices(verts: Set[int], x: int) -> Set[int]:
-    return set(sample(list(verts), x))
+def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:
+    return sample(verts, x)
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
