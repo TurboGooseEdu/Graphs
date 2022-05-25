@@ -1,4 +1,4 @@
-from tasks.task_1_1_1 import calculate_for_undirected, calculate_for_undirected_and_directed
+from tasks.tasks_123 import calculate_for_undirected, calculate_for_undirected_and_directed
 from datasets.read_vk_dataset import read_vk_dataset
 from datasets.read_google_dataset import read_google_dataset_dir_and_undir
 from datasets.read_astro_dataset import read_astro_dataset

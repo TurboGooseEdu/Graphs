@@ -1,8 +1,11 @@
+from typing import Union, Type
+
 from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
 
 
-def read_google_dataset(filename, graph_type=DirectedGraph):
+def read_google_dataset(filename: str, graph_type: Union[Type[DirectedGraph], Type[UndirectedGraph]] = DirectedGraph)\
+        -> Union[DirectedGraph, UndirectedGraph]:
     graph = graph_type("Google " + graph_type.__class__.__name__)
     with open(filename) as file:
         for line in file:
