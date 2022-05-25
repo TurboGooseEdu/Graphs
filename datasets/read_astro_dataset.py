@@ -1,7 +1,8 @@
 from graph_impls.undirected_graph import UndirectedGraph
 
 
-def read_astro_dataset(filename, graph=UndirectedGraph()):
+def read_astro_dataset(filename):
+    graph = UndirectedGraph("Astro UndirectedGraph")
     with open(filename) as file:
         for line in file:
             if line.startswith("#"):

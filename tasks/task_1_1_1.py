@@ -1,4 +1,3 @@
-from math import inf
 from random import sample
 from typing import Union, List, Set, Tuple
 
@@ -6,35 +5,54 @@ from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
 
 
-def calculate_for_undirected(graph: UndirectedGraph):
-    print("Граф:", graph.name)
-    print("-" * 30)
-    print("Количество вершин:", graph.v)
-    print("Количество ребер:", graph.e)
-    print("Плотность графа:", calculate_density(graph))
+def calculate_for_undirected(graph: UndirectedGraph) -> List[str]:
+    output = []
+    output.append("Граф: " + graph.name)
+    output.append("-" * 30)
+    output.append("Количество вершин: " + str(graph.v))
+    output.append("Количество ребер: " + str(graph.e))
+    output.append("Плотность графа: " + str(calculate_density(graph)))
     wcc = get_weakly_connected_components(graph)
     max_wcc = list(max(wcc, key=lambda x: len(x)))
-    print("Число компонент слабой связности:", len(wcc))
-    print("Мощность максимальной компоненты слабой связности:", len(max_wcc))
-    print("Доля вершин в максимальной компоненте слабой связности:", len(max_wcc) / graph.v)
+    output.append("Число компонент слабой связности: " + str(len(wcc)))
+    output.append("Мощность максимальной компоненты слабой связности: " + str(len(max_wcc)))
+    output.append("Доля вершин в максимальной компоненте слабой связности: " + str(len(max_wcc) / graph.v))
 
     wcc_part = choose_x_random_vertices(max_wcc, 500)
     r, d, p = calculate_radius_diameter_percentile(graph, wcc_part)
-    print("Радиус наибольшей компоненты слабой связности:", r)
-    print("Диаметр наибольшей компоненты слабой связности:", d)
-    print("90 процентиль расстояния между вершинами графа:", p)
+    output.append("Радиус наибольшей компоненты слабой связности: " + str(r))
+    output.append("Диаметр наибольшей компоненты слабой связности: " + str(d))
+    output.append("90 процентиль расстояния между вершинами графа: " + str(p))
+    return output
 
 
-def calculate_for_directed(undir_graph: UndirectedGraph, dir_graph: DirectedGraph):
-    calculate_for_undirected(undir_graph)
+def calculate_for_undirected_and_directed(undir_graph: UndirectedGraph, dir_graph: DirectedGraph) -> List[str]:
+    output = calculate_for_undirected(undir_graph)
     scc = get_strongly_connected_components(dir_graph)
     max_scc = max(scc, key=lambda x: len(x))
-    print("Число компонент сильной связности:", len(scc))
-    print("Мощность максимальной компоненты сильной связности:", len(max_scc))
-    print("Доля вершин в максимальной компоненте сильной связности:", len(max_scc) / dir_graph.v)
+    output.append("Число компонент сильной связности: " + str(len(scc)))
+    output.append("Мощность максимальной компоненты сильной связности: " + str(len(max_scc)))
+    output.append("Доля вершин в максимальной компоненте сильной связности: " + str(len(max_scc) / dir_graph.v))
+    output.append(str(create_metagraph(dir_graph, scc)))
+    return output
 
 
-def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int], p=90) -> Tuple[int, int, int]:
+def create_metagraph(graph: DirectedGraph, components: List[Set[int]]) -> DirectedGraph:
+    meta = DirectedGraph()
+    for i in range(len(components)):
+        meta.add_node(i)
+        comp_adj_set = set()
+        for v in components[i]:
+            comp_adj_set = comp_adj_set.union(graph.adj[v])
+        for j in range(len(components)):
+            if i == j:
+                continue
+            if comp_adj_set.intersection(components[j]):
+                meta.add_edge(i, j)
+    return meta
+
+
+def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int], p: int = 90) -> Tuple[int, int, int]:
     ranges = []
     eccs = {v: -1 for v in verts}
     for i in range(len(verts) - 1):
@@ -74,7 +92,9 @@ def bfs(graph: UndirectedGraph, start: int, goal: int) -> int:
 
 
 def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:
-    return sample(verts, x)
+    if len(verts) < x:
+        print("!!! Количество вершин в компоненте СС меньше {}: {}".format(x, len(verts)))
+    return sample(verts, min(x, len(verts)))
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
@@ -154,10 +174,9 @@ def iterative_dfs_with_backtracking(graph: DirectedGraph) -> List[int]:
 
 def sort_sublist_in_list_order(sub: List[int], lst: List[int]) -> List[int]:
     res = []
-    for i in lst:    # эта шняга работает за O(V) - все очень плохо...
+    for i in lst:  # эта шняга работает за O(V) - все очень плохо...
         if i in sub:
             res.append(i)
         if len(res) == len(sub):
             break
     return res
-
