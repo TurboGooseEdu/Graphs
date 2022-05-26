@@ -43,3 +43,13 @@ def graph_deleted_largest_nodes(graph, number):
     nodes = select_largest_degree_nodes(graph, number)
 
     return delete_nodes(copy.deepcopy(graph), nodes)
+
+
+def graph_deleted_random_nodes_percentage(graph: UndirectedGraph, percentage):
+    number = round(percentage * graph.v / 100)
+    return graph_deleted_random_nodes(graph, number)
+
+
+def graph_deleted_largest_nodes_percentage(graph: UndirectedGraph, percentage):
+    number = round(percentage * graph.v / 100)
+    return graph_deleted_largest_nodes(graph, number)
