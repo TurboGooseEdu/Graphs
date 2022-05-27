@@ -110,7 +110,9 @@ def all_clustering(graph, vert_triangles=None):
     average_coefficient /= graph.v  # graph.v - the number of vertexes
     global_coefficient = closed_triplets / triplets
 
-    print(f'triangles = {vert_triangles}')
-    print(f'local_coefficients = {local_coefficients}')
-    print(f'average_coefficient = {average_coefficient}')
-    print(f'global_coefficient = {global_coefficient}')
+    # print(f'triangles = {vert_triangles}')
+    # print(f'local_coefficients = {local_coefficients}')
+    # print(f'average_coefficient = {average_coefficient}')
+    # print(f'global_coefficient = {global_coefficient}')
+
+    return round(closed_triplets / 3), local_coefficients, average_coefficient, global_coefficient
