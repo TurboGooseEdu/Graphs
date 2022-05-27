@@ -141,3 +141,4 @@ cmake*
 
 # object file
 main
+constants.py
