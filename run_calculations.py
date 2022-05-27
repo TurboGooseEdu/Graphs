@@ -1,3 +1,5 @@
+from os import system
+
 from tasks.tasks_123 import calculate_for_undirected, calculate_for_undirected_and_directed
 from datasets.read_vk_dataset import read_vk_dataset
 from datasets.read_google_dataset import read_google_dataset_dir_and_undir
@@ -30,8 +32,15 @@ def run_calculations_for_google():
     write_output_to_file("~/Programming/graph_data/outputs/Google-metagraph.txt", metagraph)
 
 
+def run_landmarks():
+    LANDMARKS_DIR="./tasks/landmarks/"
+    system(LANDMARKS_DIR + "run.sh")
+    system(LANDMARKS_DIR+ "landmarks")
+
+
 if __name__ == '__main__':
-    pass
     # run_calculations_for_astro()
     # run_calculations_for_google()
     # run_calculations_for_vk()
+
+    run_landmarks()
