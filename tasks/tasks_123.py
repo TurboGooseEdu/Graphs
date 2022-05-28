@@ -98,7 +98,7 @@ def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
-    return 2 / (graph.e - 1)
+    return 2 * graph.e / (graph.v - 1) / graph.v
 
 
 def get_weakly_connected_components(graph: Union[DirectedGraph, UndirectedGraph]) -> List[Set[int]]:
