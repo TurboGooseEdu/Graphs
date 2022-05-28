@@ -44,9 +44,8 @@ def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int
     radius = inf
     diameter = -1
     goals = set(verts)
-    for i in range(len(verts)):
-        ecc, rngs = calculate_eccentricity_and_ranges(graph, verts[i], goals)
-        print(i, ")", ecc)
+    for v in verts:
+        ecc, rngs = calculate_eccentricity_and_ranges(graph, v, goals)
         ranges += rngs
         radius = min(ecc, radius)
         diameter = max(ecc, diameter)
