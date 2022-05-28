@@ -1,7 +1,11 @@
-from tasks.tasks_123 import calculate_for_undirected, calculate_for_undirected_and_directed
-from datasets.read_vk_dataset import read_vk_dataset
-from datasets.read_google_dataset import read_google_dataset_dir_and_undir
+import networkx as nx
+import numpy as np
+
+from datasets.read_google_dataset import read_google_dataset_dir_and_undir, read_google_dataset
 from datasets.read_astro_dataset import read_astro_dataset
+from datasets.read_vk_dataset import read_vk_dataset
+from tasks import calculate_for_undirected, calculate_for_undirected_and_directed
+from constants import *
 
 
 def write_output_to_file(output_filename, output):
@@ -11,23 +15,24 @@ def write_output_to_file(output_filename, output):
 
 
 def run_calculations_for_astro():
-    astro = read_astro_dataset("~/Programming/graph_data/CA-AstroPh.txt")
+    astro = read_astro_dataset(DATASETS_FOLDER + 'CA-AstroPh.txt')
+
     astro_output = calculate_for_undirected(astro)
-    write_output_to_file("~/Programming/graph_data/Astro-output.txt", astro_output)
+    write_output_to_file(DATASETS_OUTPUTS_FOLDER + "Astro-output.txt", astro_output)
 
 
 def run_calculations_for_vk():
-    vk = read_vk_dataset("~/Programming/graph_data/vk.csv")
+    vk = read_vk_dataset(DATASETS_FOLDER + 'vk.csv')
     vk_output = calculate_for_undirected(vk)
-    write_output_to_file("~/Programming/graph_data/VK-output.txt", vk_output)
+    write_output_to_file(DATASETS_OUTPUTS_FOLDER + "VK-output.txt", vk_output)
 
 
 def run_calculations_for_google():
-    google_dir, google_undir = read_google_dataset_dir_and_undir("~/Programming/graph_data/web-Google.txt")
+    google_dir, google_undir = read_google_dataset_dir_and_undir(DATASETS_FOLDER + 'web-Google.txt')
     google_output = calculate_for_undirected_and_directed(google_undir, google_dir)
     metagraph = google_output.pop()
-    write_output_to_file("~/Programming/graph_data/outputs/Google-output.txt", google_output)
-    write_output_to_file("~/Programming/graph_data/outputs/Google-metagraph.txt", metagraph)
+    write_output_to_file(DATASETS_OUTPUTS_FOLDER + WEB_GOOGLE_OUTPUT_FILE, google_output)
+    write_output_to_file(DATASETS_OUTPUTS_FOLDER + GOOGLE_METAGRAPH, metagraph)
 
 
 if __name__ == '__main__':
