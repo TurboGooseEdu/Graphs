@@ -1,6 +1,6 @@
 from math import inf
 from random import sample
-from typing import Union, List, Set, Tuple, Dict
+from typing import Union, List, Set, Tuple
 
 from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
@@ -46,7 +46,7 @@ def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int
     goals = set(verts)
     for i in range(len(verts)):
         ecc, rngs = calculate_eccentricity_and_ranges(graph, verts[i], goals)
-        print(i, ")", ecc, rngs)
+        print(i, ")", ecc)
         ranges += rngs
         radius = min(ecc, radius)
         diameter = max(ecc, diameter)
@@ -58,7 +58,7 @@ def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int
 
 def calculate_eccentricity_and_ranges(graph: UndirectedGraph, start: int, goals: Set[int]) -> Tuple[int, List[int]]:
     ranges = []
-    max_dist = -1
+    ecc = -1
     queue = [start, -1]
     visited = set()
     visited.add(start)
@@ -74,11 +74,11 @@ def calculate_eccentricity_and_ranges(graph: UndirectedGraph, start: int, goals:
         for neighbour in graph.adj[s]:
             if neighbour not in visited:
                 if neighbour in goals:
-                    max_dist = max(max_dist, level)
-                    ranges.append(level)
+                    ecc = max(ecc, level)
+                ranges.append(level)
                 visited.add(neighbour)
                 queue.append(neighbour)
-    return max_dist, ranges
+    return ecc, ranges
 
 
 def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:

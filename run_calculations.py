@@ -40,29 +40,29 @@ def run_calculations_for_vk():
 def run_calculations_for_google():
     google_dir, google_undir = read_google_dataset_dir_and_undir("/home/ilya/Programming/graph_data/web-Google.txt")
     print("Reading completed!")
-    # undir_output = calculate_for_undirected(google_undir)
-    # print(undir_output)
-    # write_output_to_file("/home/ilya/Programming/graph_data/outputs/Google-undirected-output.txt", undir_output)
 
-    dir_output = calculate_for_directed(google_dir)
+    output = []
+    output += calculate_for_undirected(google_undir)
+    output += calculate_for_directed(google_dir)
+    metagraph = output.pop()
+
     print("Calculations completed!")
-    metagraph = dir_output.pop()
-
     print()
-    print(*dir_output, sep="\n")
+    print(*output, sep="\n")
     print()
 
-    write_output_to_file("/home/ilya/Programming/graph_data/outputs/Google-directed-output.txt", dir_output)
+    write_output_to_file("/home/ilya/Programming/graph_data/outputs/Google-directed-output.txt", output)
     write_metagraph_to_file("/home/ilya/Programming/graph_data/outputs/Google-metagraph.txt", metagraph)
     print("File saved!")
 
 
 def calculate_time(process):
     start = time.time()
-    print("Started in " + time.ctime(start))
-    print()
+    print("Started in " + time.ctime(start), end="\n\n")
+
     process()
     finish = time.time()
+
     print()
     print("Finished in " + time.ctime(finish))
     print("Elapsed time:", finish - start, "sec.")
@@ -70,5 +70,5 @@ def calculate_time(process):
 
 if __name__ == '__main__':
     # calculate_time(run_calculations_for_astro)
-    calculate_time(run_calculations_for_google)
-    # calculate_time(run_calculations_for_vk)
+    # calculate_time(run_calculations_for_google)
+    calculate_time(run_calculations_for_vk)
