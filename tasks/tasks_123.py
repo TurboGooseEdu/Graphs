@@ -34,12 +34,22 @@ def calculate_for_directed(dir_graph: DirectedGraph) -> List[str]:
     output.append("Число компонент сильной связности: " + str(len(scc)))
     output.append("Мощность максимальной компоненты сильной связности: " + str(len(max_scc)))
     output.append("Доля вершин в максимальной компоненте сильной связности: " + str(len(max_scc) / dir_graph.v))
-    output.append(create_metagraph(dir_graph, scc))
+    # output.append(create_metagraph(dir_graph, scc))
     return output
 
 
+def print_calculations_for_undirected(graph: UndirectedGraph):
+    print(*calculate_for_undirected(graph), sep="\n")
+
+
+def print_calculations_for_directed(graph: DirectedGraph):
+    print(*calculate_for_directed(graph), sep="\n")
+
+
+#--------------------------------------------------------------------------------------------------------------------
+
+
 def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int], p: int = 90) -> Tuple[int, int, int]:
-    print("Start calculating radius and diameter")
     ranges = []
     radius = inf
     diameter = -1
@@ -51,7 +61,6 @@ def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int
         diameter = max(ecc, diameter)
     ranges.sort()
     percentile = ranges[p * len(ranges) // 100]
-    print("Finish calculating radius and diameter")
     return radius, diameter, percentile
 
 
@@ -81,8 +90,6 @@ def calculate_eccentricity_and_ranges(graph: UndirectedGraph, start: int, goals:
 
 
 def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:
-    if len(verts) < x:
-        print("!!! Количество вершин в компоненте СС меньше {}: {}".format(x, len(verts)))
     return sample(verts, min(x, len(verts)))
 
 
@@ -91,7 +98,6 @@ def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
 
 
 def get_weakly_connected_components(graph: Union[DirectedGraph, UndirectedGraph]) -> List[Set[int]]:
-    print("Calculating weakly connected components...")
     components = []
     visited = {k: False for k in graph.adj.keys()}
     for k in graph.adj.keys():
@@ -106,7 +112,6 @@ def get_weakly_connected_components(graph: Union[DirectedGraph, UndirectedGraph]
                     if not visited[i]:
                         stack.append(i)
             components.append(component)
-    print("Weakly connected components calculated!")
     return components
 
 
@@ -125,7 +130,6 @@ def create_metagraph(graph: DirectedGraph, components: List[Set[int]]) -> Direct
 
 
 def get_strongly_connected_components(graph: DirectedGraph) -> List[Set[int]]:
-    print("Calculating strongly connected components...")
     order = iterative_dfs_with_backtracking(transpose_graph(graph))
     components = []
     visited = {k: False for k in graph.adj.keys()}
@@ -141,23 +145,19 @@ def get_strongly_connected_components(graph: DirectedGraph) -> List[Set[int]]:
                     if not visited[i]:
                         stack.append(i)
             components.append(component)
-    print("Strongly connected components calculated!")
     return components
 
 
 def transpose_graph(graph: DirectedGraph) -> DirectedGraph:
-    print("Transposing graph...")
     transposed = DirectedGraph()
     for v, adj in graph.adj.items():
         transposed.add_node(v)
         for u in adj:
             transposed.add_edge(u, v)
-    print("Transposed!")
     return transposed
 
 
 def iterative_dfs_with_backtracking(graph: DirectedGraph) -> List[int]:
-    print("Performing DFS with backtracking...")
     visited = {k: False for k in graph.adj.keys()}
     posts = []
     posts_check = set()
@@ -177,5 +177,4 @@ def iterative_dfs_with_backtracking(graph: DirectedGraph) -> List[int]:
                         posts.append(v)
                         posts_check.add(v)
     posts.reverse()
-    print("DFS completed!")
     return posts
