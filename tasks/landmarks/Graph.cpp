@@ -1,28 +1,60 @@
 #include "Graph.h"
 
 Graph::Graph(std::string filename, int vertices) {
-    std::cout << "here1";
     this->name = filename;
     this->vertices = vertices;
-    std::cout << "here2";
     this->adj = std::vector<std::set<int>>(vertices, std::set<int>());
-    std::cout << "her3";
-    // this->adjMatrix = std::vector<std::vector<bool>>(vertices, std::vector<bool>(vertices, false));
-    std::cout << "here4" << std::endl;
+    this->readfromFile();
+}
+Graph::Graph(std::string filename) {
+    this->preprocess(filename);
+    this->adj = std::vector<std::set<int>>(this->vertices, std::set<int>());
     this->readfromFile();
 }
 
-Graph::~Graph() {}
+void Graph::preprocess(std::string sourceFilename) {
+    std::ifstream in(sourceFilename);
+    this->name = sourceFilename.substr(0, sourceFilename.length() - 4) + "-processed" + sourceFilename.substr(sourceFilename.length() - 4, sourceFilename.length());
+    std::ofstream out(this->name);
+
+    std::string line;
+    std::map<int, int> edges;
+
+    int count_vertices = 0;
+    int count_edges = 0;
+
+    if (!in.is_open() || !out.is_open())
+        return;
+
+    while (getline(in, line)) {
+        int u, v;
+        std::istringstream iss(line);
+        iss >> u;
+        iss >> v;
+        if (edges[u] == 0)
+            edges[u] = ++count_vertices;
+        if (edges[v] == 0)
+            edges[v] = ++count_vertices;
+
+        out << edges[u] - 1 << " " << edges[v] - 1 << std::endl;
+        ++count_edges;
+    }
+
+    this->edges = count_edges;
+    this->vertices = count_vertices;
+    this->vertices_map = edges;
+
+    in.close();
+    out.close();
+}
 
 void Graph::readfromFile() {
     std::ifstream in(this->name);
     std::string line;
     int count_edges = 0;
 
-    if (!in.is_open()) {
-        std::cout << "asa";
+    if (!in.is_open())
         return;
-    }
 
     while (getline(in, line)) {
         int u, v;
@@ -44,7 +76,15 @@ void Graph::addEdge(int u, int v) {
     this->adj[u].insert(v);
     ++this->edges;
 }
-std::string Graph::getName() const { return this->name.substr(7, this->name.length() - 11); }
+
+Graph::~Graph() {}
+int Graph::initial_vertex(int v) {
+    return this->vertices_map[v] - 1;
+}
+
+std::string Graph::getName() const {
+    return this->name.substr(7, this->name.length() - 11);
+}
 int Graph::getVertices() const { return this->vertices; }
 int Graph::getEdges() const { return this->edges; }
 std::set<int> Graph::getNeighbours(int v) { return this->adj[v]; }

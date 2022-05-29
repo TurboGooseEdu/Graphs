@@ -207,8 +207,7 @@ int getApproximateDistance(
     switch (mode) {
     case Basic: {
         for (auto d : *distances)
-            if (d[s] != NO_DATA_VALUE && d[t] != NO_DATA_VALUE)
-                stDistances.push_back(d[s] + d[t]);
+            stDistances.push_back(d[s] + d[t]);
         break;
     }
     case SC: {
@@ -368,11 +367,11 @@ void process(Graph *g) {
     int n = g->getVertices();
     int m = 500; //количество вершин для подсчёта аппр.расстояний
 
-    clock_t t = clock();
+    clock_t t0 = clock();
     vector<std::pair<int, int>> randVertices = getRandomVertices(n, m);
     fOutActualPaths(&g->adj, randVertices, g->getName());
 
-    cout << "Время поиска точных путей между вершинами, ms: " << (clock() - t) / 1e3 << endl;
+    cout << "Время поиска точных путей между вершинами, ms: " << (clock() - t0) / 1e3 << endl;
 
     std::ofstream out("./landmarks-" + g->getName() + ".txt");
 
@@ -381,42 +380,107 @@ void process(Graph *g) {
 
     for (int landmarkAmount : {20, 50, 100})
         for (auto landmarkSelection : {Random, HighestDegree, BestCoverage}) {
-            t = clock();
+            t0 = clock();
             vector<int> landmarks = selectLandmarks(&g->adj, landmarkAmount, landmarkSelection);
-            cout << "Время выбора опорных точек (" << landmarkAmount << " точек; метод " << landmarkSelection << "), ms: " << (clock() - t) / 1e3 << endl;
+            cout << "Время выбора опорных точек (" << landmarkAmount << " точек; метод " << landmarkSelection << "), ms: " << (clock() - t0) / 1e3 << endl;
 
             for (auto mode : {Basic, SC}) {
-                t = clock();
+                t0 = clock();
                 vector<vector<int>> distances = precompute(&g->adj, &landmarks, mode);
-                cout << "Время преподсчёта (метод " << mode << "), ms: " << (clock() - t) / 1e3 << endl;
-                t = clock();
+                cout << "Время преподсчёта (метод " << mode << "), ms: " << (clock() - t0) / 1e3 << endl;
+                int t_appr_dist = 0;
                 for (auto vertices : randVertices) {
                     int s = vertices.first;
                     int t = vertices.second;
+                    clock_t t1 = clock();
                     int approximateDistance = getApproximateDistance(&g->adj, s, t, &distances, &landmarks, mode);
+                    t_appr_dist += clock() - t1;
                     out << landmarkAmount << "," << landmarkSelection << "," << mode << "," << s << "-" << t << "," << approximateDistance << endl;
                 }
-                cout << "Время поиска приближённых путей между вершинами, ms: " << (clock() - t) / 1e3 << endl;
+                cout << "Время поиска приближённых путей между вершинами, ms: " << t_appr_dist / 1e3 << endl;
             }
         }
     out.close();
+}
+void interactive_process(Graph *g) {
+    cout << "===========================" << endl
+         << "\t" << g->getName() << endl
+         << "===========================" << endl
+         << "Количество вершин: " << g->getVertices() << endl
+         << "Введите номера вершин." << endl
+         << endl;
+
+    vector<int> landmarks = selectLandmarks(&g->adj, 100, HighestDegree);
+    int v1;
+    int v2;
+    vector<vector<int>> distancesBasic = precompute(&g->adj, &landmarks, Basic);
+    vector<vector<int>> distancesSC = precompute(&g->adj, &landmarks, SC);
+
+    try {
+        std::cin >> v1 >> v2;
+        if (v1 < 0 || v2 < 0 || v1 > g->getVertices() - 1 || v2 > g->getVertices() - 1) {
+            return;
+        }
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+        return;
+    }
+    while (true) {
+        int s = g->initial_vertex(v1);
+        int t = g->initial_vertex(v2);
+
+        int pathLength = BFS(&g->adj, s, t);
+        int d0;
+        if (pathLength == NO_DATA_VALUE)
+            d0 = __INT_MAX__;
+        else
+            d0 = pathLength;
+        cout << "Точное расстояние: " << d0 << endl;
+
+        int d1 = getApproximateDistance(&g->adj, s, t, &distancesBasic, &landmarks, Basic);
+        cout << "Аппроксимационное расстояние (метод Basic): " << d1 << endl;
+
+        int d2 = getApproximateDistance(&g->adj, s, t, &distancesSC, &landmarks, SC);
+        cout << "Аппроксимационное расстояние (метод ShortCutting): " << d2 << endl;
+
+        cout << "==============" << endl
+             << "Введите новую пару" << endl;
+
+        try {
+            std::cin >> v1 >> v2;
+            if (v1 == -1 || v2 == -1) {
+                break;
+            }
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << '\n';
+            break;
+        }
+    }
 }
 
 int main(int argc, char **argv) {
 
     std::srand(std::time(nullptr));
+    if (argc > 0) {
+        if (std::string(argv[1]) == std::string("--all")) {
+            Graph *astro = new Graph("./data/astro.txt", 18772);
+            cout << astro->getName();
+            process(astro);
+            delete astro;
 
-    // Graph *astro = new Graph("./data/astro.txt", 18772);
-    // process(astro);
-    // delete astro;
+            Graph *google = new Graph("./data/google.txt", 875713);
+            process(google);
+            delete google;
 
-    // Graph *google = new Graph("./data/google.txt", 875713);
-    // process(google);
-    // delete google;
+            Graph *vk = new Graph("./data/vk.txt", 3215722);
+            process(vk);
+            delete vk;
+        } else if (std::string(argv[1]) == std::string("-i") && argc > 2) {
 
-    Graph *vk = new Graph("./data/vk.txt", 3215722);
-    process(vk);
-    delete vk;
-
+            Graph *g = new Graph(argv[2]);
+            interactive_process(g);
+            delete g;
+        }
+    }
     return 0;
 }

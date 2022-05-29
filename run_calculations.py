@@ -35,12 +35,13 @@ def run_calculations_for_google():
 def run_landmarks():
     LANDMARKS_DIR="./tasks/landmarks/"
     system(LANDMARKS_DIR + "run.sh")
-    system(LANDMARKS_DIR+ "landmarks")
+    system(LANDMARKS_DIR+ "landmarks --all")
 
 
 if __name__ == '__main__':
+    pass
     # run_calculations_for_astro()
     # run_calculations_for_google()
     # run_calculations_for_vk()
 
-    run_landmarks()
+    # run_landmarks()
