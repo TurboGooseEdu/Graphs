@@ -133,11 +133,14 @@ dmypy.json
 *.vscode
 
 #local
-local*
-data*
+local
+data
 
 # 
 cmake*
 
 # object file
-main
+tasks/landmarks/landmarks
+
+actualPaths*.txt
+landmarks*.txt

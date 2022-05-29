@@ -19,7 +19,6 @@ def write_metagraph_to_file(output_filename: str, metagraph: DirectedGraph):
             for u in metagraph.adj[v]:
                 out.write(str(v) + " " + str(u) + "\n")
 
-
 if __name__ == '__main__':
     available_graphs = [   # (directed, filename)
         (True, "datasets/email-Eu-core.txt"),
@@ -38,5 +37,8 @@ if __name__ == '__main__':
     else:
         undir_graph = read_undirected_graph(filename)
 
+
     # write your script here
+
+
 
