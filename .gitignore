@@ -142,4 +142,5 @@ cmake*
 # object file
 tasks/landmarks/landmarks
 
-*.txt
+actualPaths*.txt
+landmarks*.txt
