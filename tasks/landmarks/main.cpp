@@ -207,7 +207,8 @@ int getApproximateDistance(
     switch (mode) {
     case Basic: {
         for (auto d : *distances)
-            stDistances.push_back(d[s] + d[t]);
+            if (d[s] != NO_DATA_VALUE && d[t] != NO_DATA_VALUE)
+                stDistances.push_back(d[s] + d[t]);
         break;
     }
     case SC: {
@@ -476,7 +477,6 @@ int main(int argc, char **argv) {
             process(vk);
             delete vk;
         } else if (std::string(argv[1]) == std::string("-i") && argc > 2) {
-
             Graph *g = new Graph(argv[2]);
             interactive_process(g);
             delete g;
