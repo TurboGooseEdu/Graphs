@@ -1,3 +1,6 @@
+from .plotting import plot_probability_function
+
+
 def node_degrees(graph):
     return dict(map(lambda item: (item[0], len(item[1])), graph.adj.items()))
 
@@ -24,3 +27,7 @@ def average_node_degree(degrees):
         result += current_degree
 
     return result / len(degrees)
+
+
+def create_probability_function(graph):
+    plot_probability_function(degrees_probabilities(graph))

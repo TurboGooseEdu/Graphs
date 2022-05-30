@@ -4,6 +4,12 @@ from typing import Union, List, Set, Tuple
 from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
 from tasks.degrees import node_degrees, average_node_degree
+from tasks.clustering import all_clustering
+
+
+def print_output(output):
+    for s in output:
+        print(s)
 
 
 def calculate_for_undirected(graph: UndirectedGraph) -> List[str]:
@@ -45,6 +51,8 @@ def calculate_for_undirected(graph: UndirectedGraph) -> List[str]:
     output.append("Мощность максимальной компоненты слабой связности: " + str(len(max_wcc)))
     output.append("Доля вершин в максимальной компоненте слабой связности: " + str(len(max_wcc) / graph.v))
 
+    print_output(output)
+
     return output
 
 
@@ -56,6 +64,9 @@ def calculate_for_undirected_and_directed(undir_graph: UndirectedGraph, dir_grap
     output.append("Мощность максимальной компоненты сильной связности: " + str(len(max_scc)))
     output.append("Доля вершин в максимальной компоненте сильной связности: " + str(len(max_scc) / dir_graph.v))
     output.append(str(create_metagraph(dir_graph, scc)))
+
+    print_output(output)
+
     return output
 
 

@@ -40,7 +40,11 @@ def delete_nodes_list(graph: UndirectedGraph, nodes):
     return graph
 
 
-def calculate_fraction(graph: UndirectedGraph, percentage: int):
+def calculate_proportion_for_node(graph: UndirectedGraph, percentage: int):
+    if graph.v == 0:
+        print("Граф пуст")
+        return 0
+
     output = []
     wcc = get_weakly_connected_components(graph)
     max_wcc = list(max(wcc, key=lambda x: len(x)))
@@ -54,11 +58,11 @@ def calculate_fraction(graph: UndirectedGraph, percentage: int):
     return len(max_wcc) / graph.v
 
 
-def calculate_all_fractions(graph: UndirectedGraph, nodes):
+def get_proportions_distribution(graph: UndirectedGraph, nodes):
     one_percent_nodes_number = graph.v // 100
     left_border = 0
 
-    calculate_fraction(graph, 0)
+    calculate_proportion_for_node(graph, 0)
 
     proportions = [0] * 100
 
@@ -66,31 +70,17 @@ def calculate_all_fractions(graph: UndirectedGraph, nodes):
         right_border = left_border + one_percent_nodes_number
         delete_nodes_list(graph, nodes[left_border:right_border])
 
-        proportions[i] = calculate_fraction(graph, i + 1)
+        proportions[i] = calculate_proportion_for_node(graph, i + 1)
 
         left_border = right_border
 
     return proportions
 
 
-def plot_nodes_fraction_graphs(graph):
+def create_nodes_proportions_graphs(graph):
     list_of_proportions = [
-        calculate_all_fractions(copy.deepcopy(graph), get_random_nodes_list(graph)),
-        calculate_all_fractions(graph, get_largest_degree_nodes_list(graph))
+        get_proportions_distribution(copy.deepcopy(graph), get_random_nodes_list(graph)),
+        get_proportions_distribution(graph, get_largest_degree_nodes_list(graph))
     ]
 
     plot_deleting_nodes(list_of_proportions, graph.name)
-
-
-if __name__ == '__main__':
-    # print('reading astro ph')
-    # graph = read_astro_dataset(DATASETS_FOLDER + 'CA-AstroPh.txt')
-    # plot_nodes_fraction_graphs(graph)
-
-    print('reading web-google')
-    graph = read_google_dataset(DATASETS_FOLDER + 'web-Google.txt', UndirectedGraph)
-    plot_nodes_fraction_graphs(graph)
-    #
-    # print('reading vk')
-    # graph = read_vk_dataset(DATASETS_FOLDER + 'vk.csv')
-    # plot_nodes_fraction_graphs(graph)
