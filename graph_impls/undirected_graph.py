@@ -31,7 +31,7 @@ class UndirectedGraph:
     def remove_node(self, a):
         ne1 = self.adj[a]
         self.e -= len(ne1)
-        for node in ne1:
+        for node in ne1.copy():
             self.adj[node].remove(a)
         self.adj.pop(a)
         self.v -= 1

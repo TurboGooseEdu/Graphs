@@ -4,6 +4,13 @@ from typing import Union, List, Set, Tuple
 
 from graph_impls.directed_graph import DirectedGraph
 from graph_impls.undirected_graph import UndirectedGraph
+from tasks.degrees import node_degrees, average_node_degree
+from tasks.clustering import all_clustering
+
+
+def print_output(output):
+    for s in output:
+        print(s)
 
 
 def calculate_for_undirected(graph: UndirectedGraph) -> List[str]:
@@ -24,6 +31,29 @@ def calculate_for_undirected(graph: UndirectedGraph) -> List[str]:
     output.append("Радиус наибольшей компоненты слабой связности: " + str(r))
     output.append("Диаметр наибольшей компоненты слабой связности: " + str(d))
     output.append("90 процентиль расстояния между вершинами графа: " + str(p))
+
+    total_triangles, local_coeffs, average_coeff, global_coeff = all_clustering(graph)
+    output.append("Количество треугольников: " + str(total_triangles))
+    output.append("Средний кластерный коэффициент: " + str(average_coeff))
+    output.append("Глобальный кластерный коэффициент: " + str(global_coeff))
+
+    degrees = node_degrees(graph)
+    average_degree = average_node_degree(degrees)
+    output.append(' ')
+    output.append("Минимальная степень узла: " + str(min(degrees.values())))
+    output.append("Максимальная степень узла: " + str(max(degrees.values())))
+    output.append("Средняя степень узла: " + str(average_degree))
+
+    wcc = get_weakly_connected_components(graph)
+    max_wcc = list(max(wcc, key=lambda x: len(x)))
+    output.append(' ')
+    output.append("Число вершин графа: " + str(graph.v))
+    output.append("Число компонент слабой связности: " + str(len(wcc)))
+    output.append("Мощность максимальной компоненты слабой связности: " + str(len(max_wcc)))
+    output.append("Доля вершин в максимальной компоненте слабой связности: " + str(len(max_wcc) / graph.v))
+
+    print_output(output)
+
     return output
 
 
@@ -34,6 +64,10 @@ def calculate_for_directed(dir_graph: DirectedGraph) -> List[str]:
     output.append("Число компонент сильной связности: " + str(len(scc)))
     output.append("Мощность максимальной компоненты сильной связности: " + str(len(max_scc)))
     output.append("Доля вершин в максимальной компоненте сильной связности: " + str(len(max_scc) / dir_graph.v))
+    output.append(str(create_metagraph(dir_graph, scc)))
+
+    print_output(output)
+
     # output.append(create_metagraph(dir_graph, scc))
     return output
 
@@ -94,7 +128,7 @@ def choose_x_random_vertices(verts: List[int], x: int) -> List[int]:
 
 
 def calculate_density(graph: Union[DirectedGraph, UndirectedGraph]) -> int:
-    return 2 / (graph.e - 1)
+    return 2 * graph.e / (graph.v - 1) / graph.v
 
 
 def get_weakly_connected_components(graph: Union[DirectedGraph, UndirectedGraph]) -> List[Set[int]]:
