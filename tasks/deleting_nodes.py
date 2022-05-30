@@ -1,13 +1,9 @@
 import copy
 import random
-from typing import List
 
 from graph_impls import UndirectedGraph
 from tasks import node_degrees
-from datasets import read_astro_dataset, read_google_dataset, read_vk_dataset
-from constants import DATASETS_FOLDER
 from tasks import get_weakly_connected_components
-import matplotlib.pyplot as plt
 from tasks.plotting import plot_deleting_nodes
 
 
