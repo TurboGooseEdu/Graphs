@@ -80,26 +80,43 @@ def print_calculations_for_directed(graph: DirectedGraph):
     print(*calculate_for_directed(graph), sep="\n")
 
 
-#--------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------
 
-
-def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int], p: int = 90) -> Tuple[int, int, int]:
+def calculate_radius_diameter_percentile(graph: UndirectedGraph, verts: List[int]) -> Tuple[int, int, int]:
     ranges = []
     radius = inf
     diameter = -1
     goals = set(verts)
-    for v in verts:
-        ecc, rngs = calculate_eccentricity_and_ranges(graph, v, goals)
-        ranges += rngs
+    for i in range(len(verts)):
+        ecc, rngs = calculate_eccentricity_and_ranges(graph, verts[i], goals)
+        merge_ranges_lists(ranges, rngs)
         radius = min(ecc, radius)
         diameter = max(ecc, diameter)
-    ranges.sort()
-    percentile = ranges[p * len(ranges) // 100]
+        p = calculate_percentile(ranges)
+    percentile = calculate_percentile(ranges)
     return radius, diameter, percentile
 
 
+def merge_ranges_lists(target: List[int], addition: List[int]):
+    for i in range(min(len(target), len(addition))):
+        target[i] += addition[i]
+    if len(addition) > len(target):
+        target += addition[len(target):]
+
+
+def calculate_percentile(ranges: List[int], p: int = 90) -> int:
+    n = sum(ranges)
+    index = round(p * n / 100) - 1
+    part_sum = 0
+    for j in range(len(ranges)):
+        if part_sum <= index < part_sum + ranges[j]:
+            return j + 1
+        part_sum += ranges[j]
+    return -1
+
+
 def calculate_eccentricity_and_ranges(graph: UndirectedGraph, start: int, goals: Set[int]) -> Tuple[int, List[int]]:
-    ranges = []
+    ranges = [0]
     ecc = -1
     queue = [start, -1]
     visited = set()
@@ -111,15 +128,17 @@ def calculate_eccentricity_and_ranges(graph: UndirectedGraph, start: int, goals:
             if not queue:
                 break
             level += 1
+            ranges.append(0)
             queue.append(-1)
             continue
         for neighbour in graph.adj[s]:
             if neighbour not in visited:
                 if neighbour in goals:
                     ecc = max(ecc, level)
-                ranges.append(level)
+                ranges[-1] += 1
                 visited.add(neighbour)
                 queue.append(neighbour)
+    ranges.pop()
     return ecc, ranges
 
 
